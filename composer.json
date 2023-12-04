@@ -49,6 +49,7 @@
         "guanguans/ai-commit": "^1.8",
         "guanguans/monorepo-builder-worker": "^1.4",
         "kubawerlos/php-cs-fixer-custom-fixers": "^3.17",
+        "laravel/facade-documenter": "dev-main",
         "mockery/mockery": "^1.6",
         "nunomaduro/larastan": "^2.6",
         "orchestra/testbench": "^8.16",
@@ -185,7 +186,7 @@
         "composer-validate": "@composer validate --check-lock --strict --ansi -v",
         "doctum": "@php ./vendor/bin/doctum.php update doctum.php --ansi -v",
         "facade-lint": "@facade-update --lint",
-        "facade-update": "/opt/local/bin/php81 -f ./facade.php -- Guanguans\\\\FilamentLoginCaptcha\\\\Facades\\\\CaptchaBuilder Guanguans\\\\FilamentLoginCaptcha\\\\Facades\\\\PhraseBuilder",
+        "facade-update": "/opt/homebrew/opt/php@8.1/bin/php -f ./facade.php -- Guanguans\\\\FilamentLoginCaptcha\\\\Facades\\\\CaptchaBuilder Guanguans\\\\FilamentLoginCaptcha\\\\Facades\\\\PhraseBuilder",
         "infection": "@php ./vendor/bin/infection --test-framework=pest --show-mutations --threads=4 --ansi -v",
         "json-lint": "@php ./vendor/bin/jsonlint *.json .*rc",
         "lint": [

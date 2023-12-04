@@ -12,45 +12,55 @@ declare(strict_types=1);
 
 namespace Guanguans\FilamentLoginCaptcha;
 
+use Composer\InstalledVersions;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Support\Helper;
-use Dcat\Admin\Traits\HasFormResponse;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class LoginCaptchaServiceProvider extends PackageServiceProvider
 {
-    use HasFormResponse;
-
-    /** @var bool */
-    protected $defer = false;
-
-    public function register(): void
+    public function configurePackage(Package $package): void
     {
-        $this->setupConfig()
-            ->registerPhraseBuilder()
+        $package
+            ->name('filament-login-captcha')
+            ->hasConfigFile()
+            ->hasViews()
+            ->hasTranslations()
+            ->hasRoute('api')
+            ->hasInstallCommand(function (InstallCommand $command): void {
+                $command
+                    ->publishConfigFile()
+                    ->copyAndRegisterServiceProviderInApp()
+                    ->askToStarRepoOnGitHub('guanguans/filament-login-captcha');
+            });
+    }
+
+    public function packageRegistered(): void
+    {
+        $this->registerPhraseBuilder()
             ->registerCaptchaBuilder();
     }
 
-    public function init(): void
+    public function packageBooted(): void
     {
-        $this->exceptRoutes = [
-            'auth' => $uri = config('route.uri'),
-            'permission' => $uri,
-        ];
+        // $this->exceptRoutes = [
+        //     'auth' => $uri = config('route.uri'),
+        //     'permission' => $uri,
+        // ];
 
-        parent::init();
+        $this
+            // ->extendValidator()
+            ->addSectionToAboutCommand();
 
-        $this->setupConfig()
-            ->publishView()
-            ->loadMigrations()
-            ->extendValidator()
-            ->bootingCaptcha();
+        // $this->bootingCaptcha();
     }
 
     public function provides(): array
@@ -63,58 +73,9 @@ class LoginCaptchaServiceProvider extends PackageServiceProvider
         ];
     }
 
-    public function settingForm(): Setting
-    {
-        return new Setting($this);
-    }
-
-    public function configurePackage(Package $package): void
-    {
-        // TODO: Implement configurePackage() method.
-    }
-
-    /**
-     * @noinspection RealpathInStreamContextInspection
-     */
-    protected function setupConfig(): self
-    {
-        $this->mergeConfigFrom(
-            $source = realpath($raw = __DIR__.'/../config/login-captcha.php') ?: $raw,
-            'login-captcha'
-        );
-
-        if ($this->app->runningInConsole()) {
-            $this->publishes([$source => config_path('login-captcha.php')], 'dcat-login-captcha');
-        }
-
-        return $this;
-    }
-
-    protected function publishView(): self
-    {
-        if ($this->app->runningInConsole()) {
-            $this->publishes(
-                [$this->getViewPath() => resource_path(sprintf('views/vendor/%s', $this->getName()))],
-                'dcat-login-captcha'
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * 初始化配置.
-     */
-    protected function initConfig(): void
-    {
-        parent::initConfig();
-        $this->config += config('login-captcha', []);
-    }
-
     protected function registerPhraseBuilder(): self
     {
         $this->app->singleton(PhraseBuilder::class, static fn (): PhraseBuilder => new PhraseBuilder(config('length'), config('charset')));
-
         $this->alias(PhraseBuilder::class);
 
         return $this;
@@ -139,16 +100,13 @@ class LoginCaptchaServiceProvider extends PackageServiceProvider
         return $this;
     }
 
-    protected function loadMigrations(): self
-    {
-        $this->loadMigrationsFrom(__DIR__.'/../updates/2022_08_31_164022_update_admin_settings_for_dcat_login_captcha.php');
-
-        return $this;
-    }
-
     protected function extendValidator(): self
     {
-        Validator::extend('dcat_login_captcha', static fn ($attribute, $value): bool => login_captcha_check($value), self::trans('login-captcha.captcha_error'));
+        Validator::extend(
+            'filament_login_captcha',
+            static fn ($attribute, $value): bool => login_captcha_check($value),
+            self::trans('filament-login-captcha.captcha_error')
+        );
 
         return $this;
     }
@@ -172,7 +130,7 @@ class LoginCaptchaServiceProvider extends PackageServiceProvider
 
             if (Helper::matchRequestPath("POST:$loginPath")) {
                 $validator = Validator::make(Request::post(), [
-                    'captcha' => 'required|dcat_login_captcha',
+                    'captcha' => 'required|filament_login_captcha',
                 ]);
 
                 if ($validator->fails()) {
@@ -201,10 +159,47 @@ class LoginCaptchaServiceProvider extends PackageServiceProvider
     {
         return str($class)
             ->replaceFirst(__NAMESPACE__, '')
-            ->start('\\DcatLoginCaptcha')
+            ->start('\\FilamentLoginCaptcha')
             ->replaceFirst('\\', '')
             ->explode('\\')
             ->map(static fn (string $name): string => Str::snake($name, '-'))
             ->implode('.');
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    protected function addSectionToAboutCommand(): self
+    {
+        if (! class_exists(InstalledVersions::class)) {
+            return $this;
+        }
+
+        AboutCommand::add('Filament Login Captcha', function (): array {
+            $fullPackageName = "guanguans/{$this->package->name}";
+
+            $installedVersions = collect(InstalledVersions::getAllRawData())
+                ->pluck('versions')
+                ->first(static fn (array $installedVersions): bool => isset($installedVersions[$fullPackageName]), []);
+
+            $composerJson = json_decode(
+                file_get_contents(base_path("vendor/{$fullPackageName}/composer.json")),
+                true,
+                512,
+                JSON_THROW_ON_ERROR
+            );
+
+            return collect(($installedVersions[$fullPackageName] ?? []) + $composerJson)
+                ->except([
+                    'install_path',
+                    'readme',
+                    'reference',
+                ])
+                ->filter(static fn ($value): bool => \is_string($value) && $value)
+                ->mapWithKeys(static fn ($value, $key) => [Str::headline($key) => $value])
+                ->toArray();
+        });
+
+        return $this;
     }
 }

@@ -12,12 +12,13 @@ declare(strict_types=1);
 
 namespace Guanguans\FilamentLoginCaptcha;
 
+use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Support\Traits\Tappable;
 
 class CaptchaBuilder extends \Gregwar\Captcha\CaptchaBuilder
 {
-    // use Conditionable;
+    use Conditionable;
     use Macroable;
     use Tappable;
 }
