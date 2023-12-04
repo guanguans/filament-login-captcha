@@ -12,9 +12,7 @@ declare(strict_types=1);
 
 namespace Guanguans\FilamentLoginCaptchaTests;
 
-use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use phpmock\phpunit\PHPMock;
-use Spatie\Snapshots\MatchesSnapshots;
 
 /**
  * @internal
@@ -25,8 +23,6 @@ use Spatie\Snapshots\MatchesSnapshots;
  */
 class TestCase extends \PHPUnit\Framework\TestCase
 {
-    use ArraySubsetAsserts;
-    use MatchesSnapshots;
     use PHPMock;
 
     /**

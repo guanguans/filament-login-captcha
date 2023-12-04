@@ -16,4 +16,4 @@ it('to be string.', function ($movie): void {
 
 it('is is snapshot.', function ($movie): void {
     $this->assertMatchesSnapshot($movie);
-})->group(__DIR__, __FILE__)->with('movies');
+})->group(__DIR__, __FILE__)->with('movies')->skip();

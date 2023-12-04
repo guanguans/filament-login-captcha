@@ -12,9 +12,7 @@ declare(strict_types=1);
 
 namespace Guanguans\FilamentLoginCaptchaTests;
 
-use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Spatie\Snapshots\MatchesSnapshots;
 
 /**
  * @internal
@@ -25,9 +23,6 @@ use Spatie\Snapshots\MatchesSnapshots;
  */
 class LaravelTestCase extends \Orchestra\Testbench\TestCase
 {
-    use ArraySubsetAsserts;
-    use MatchesSnapshots;
-
     /**
      * This method is called before the first test of this test class is run.
      */

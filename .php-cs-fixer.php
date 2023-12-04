@@ -20,22 +20,10 @@ $header = <<<'header'
     This source file is subject to the MIT license that is bundled.
     header;
 
-$license = License\Type\MIT::text(
-    __DIR__.'/LICENSE',
-    License\Range::since(
-        License\Year::fromString('2018'),
-        new DateTimeZone('Asia/Shanghai'),
-    ),
-    License\Holder::fromString('guanguans'),
-    License\Url::fromString('https://github.com/guanguans/filament-login-captcha'),
-);
-// $license->header();
-// $license->save();
-
 /** @noinspection PhpParamsInspection */
 $finder = PhpCsFixer\Finder::create()
     ->in([
-        __DIR__.'/benchmarks',
+        __DIR__.'/config',
         __DIR__.'/src',
         __DIR__.'/tests',
     ])
@@ -69,7 +57,7 @@ return (new PhpCsFixer\Config())
     ->setUsingCache(true)
     ->setCacheFile(__DIR__.'/.php-cs-fixer.cache')
     ->registerCustomFixers(new PhpCsFixerCustomFixers\Fixers())
-    ->registerCustomFixers(new PedroTroller\CS\Fixer\Fixers())
+    // ->registerCustomFixers(new PedroTroller\CS\Fixer\Fixers())
     ->setRules([
         // '@PHP70Migration' => true,
         // '@PHP70Migration:risky' => true,

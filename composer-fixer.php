@@ -18,13 +18,13 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Process\Process;
 
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 
 collect(
     Finder::create()
         ->in([
-            __DIR__.'/../',
-            __DIR__.'/../vendor-bin/*/',
+            __DIR__.'/',
+            // __DIR__.'/vendor-bin/*/',
         ])
         ->exclude('vendor')
         ->name('composer.json')
@@ -34,22 +34,21 @@ collect(
     ->each(static function (SplFileInfo $splFileInfo): void {
         /** @noinspection PhpUnhandledExceptionInspection */
         collect(json_decode($splFileInfo->getContents(), true, 512, JSON_THROW_ON_ERROR))
-            ->only(['require', 'require-dev'])
+            ->only([
+                // 'require',
+                'require-dev',
+            ])
             ->each(static function ($packagist, $env) use ($splFileInfo): void {
                 $symfonyStyle = new SymfonyStyle(new ArgvInput(), new ConsoleOutput());
                 $symfonyStyle->note(sprintf('The composer file(%s) %s updating...', $splFileInfo->getRealPath(), $env));
 
                 $hydratedPackagist = collect($packagist)
                     ->filter(static fn ($version, $package) => ! in_array(
-                        $version,
-                        ['*', 'dev-main', 'dev-master'],
-                        true
-                    ) && ! in_array(
                         $package,
-                        ['php', 'elasticquent/elasticquent'],
+                        ['php', 'laravel/facade-documenter'],
                         true
                     ))
-                    ->map(static fn ($version, $package) => "$package:'*'")
+                    ->map(static fn ($version, $package) => (string) $package)
                     ->implode(' ');
                 if (empty($hydratedPackagist)) {
                     $symfonyStyle->note(sprintf('The composer file(%s) %s nothing to update.', $splFileInfo->getRealPath(), $env));
@@ -64,6 +63,7 @@ collect(
                     ->__toString();
                 $symfonyStyle->note($command);
                 Process::fromShellCommandline($command, $splFileInfo->getPath(), ['COMPOSER_MEMORY_LIMIT' => -1])
+                    ->setTimeout(null)
                     ->mustRun(static function ($type, $buffer) use ($symfonyStyle): void {
                         $symfonyStyle->write($buffer);
                     });
