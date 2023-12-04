@@ -27,6 +27,11 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class LoginCaptchaServiceProvider extends PackageServiceProvider
 {
+    public static function trans(?string $key = null, array $replace = [], ?string $locale = null): null|array|string
+    {
+        return __("filament-login-captcha::$key", $replace, $locale);
+    }
+
     public function configurePackage(Package $package): void
     {
         $package
@@ -57,7 +62,7 @@ class LoginCaptchaServiceProvider extends PackageServiceProvider
         // ];
 
         $this
-            // ->extendValidator()
+            ->extendValidator()
             ->addSectionToAboutCommand();
 
         // $this->bootingCaptcha();
@@ -105,7 +110,7 @@ class LoginCaptchaServiceProvider extends PackageServiceProvider
         Validator::extend(
             'filament_login_captcha',
             static fn ($attribute, $value): bool => login_captcha_check($value),
-            self::trans('filament-login-captcha.captcha_error')
+            self::trans('login-captcha.captcha_error')
         );
 
         return $this;
