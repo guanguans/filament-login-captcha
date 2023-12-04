@@ -11585,16 +11585,16 @@
         },
         {
             "name": "luracast/restler",
-            "version": "5.0.12",
+            "version": "5.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Luracast/Restler.git",
-                "reference": "099e4f4627c1067d3865dddbbc973926f3c8d991"
+                "reference": "069b5c55ef5153ce628d9382604ded570d6bac48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Luracast/Restler/zipball/099e4f4627c1067d3865dddbbc973926f3c8d991",
-                "reference": "099e4f4627c1067d3865dddbbc973926f3c8d991",
+                "url": "https://api.github.com/repos/Luracast/Restler/zipball/069b5c55ef5153ce628d9382604ded570d6bac48",
+                "reference": "069b5c55ef5153ce628d9382604ded570d6bac48",
                 "shasum": ""
             },
             "require": {
@@ -11651,9 +11651,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Luracast/Restler/issues",
-                "source": "https://github.com/Luracast/Restler/tree/5.0.12"
+                "source": "https://github.com/Luracast/Restler/tree/5.0.13"
             },
-            "time": "2023-04-05T03:05:09+00:00"
+            "time": "2023-11-30T08:06:08+00:00"
         },
         {
             "name": "marcj/topsort",
