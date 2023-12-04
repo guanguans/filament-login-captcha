@@ -43,12 +43,12 @@ collect(
                 $symfonyStyle->note(sprintf('The composer file(%s) %s updating...', $splFileInfo->getRealPath(), $env));
 
                 $hydratedPackagist = collect($packagist)
-                    ->filter(static fn ($version, $package) => ! in_array(
+                    ->filter(static fn ($version, $package): bool => ! in_array(
                         $package,
                         ['php', 'laravel/facade-documenter'],
                         true
                     ))
-                    ->map(static fn ($version, $package) => (string) $package)
+                    ->map(static fn ($version, $package): string => (string) $package)
                     ->implode(' ');
                 if (empty($hydratedPackagist)) {
                     $symfonyStyle->note(sprintf('The composer file(%s) %s nothing to update.', $splFileInfo->getRealPath(), $env));

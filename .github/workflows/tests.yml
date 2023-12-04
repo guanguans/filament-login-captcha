@@ -1,18 +1,29 @@
 name: tests
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        php: [8.0]
-        dependency-version: [prefer-stable]
+        os: [ ubuntu-latest ]
+        php: [ 8.1, 8.3 ]
+        dependency-version: [ prefer-stable ]
+        laravel: [ 10.0.*, 11.*]
+        include:
+          - laravel: 10.0.*
+            testbench: 8.*
+        exclude:
+          - php: 7.3
+            laravel: 9.*
+          - php: 7.3
+            laravel: 10.*
+          - php: 8.2
+            laravel: 7.0.*
 
-    name: P${{ matrix.php }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
     steps:
       - name: Checkout code
@@ -32,13 +43,16 @@ jobs:
           coverage: xdebug
 
       - name: Install dependencies
-        run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --ansi -v
+        run: |
+          composer remove "brainmaestro/composer-git-hooks" --no-interaction --no-scripts --dev --ansi -v
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update --ansi -v
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-scripts --ansi -W -v
 
       - name: Execute tests
-        run: composer test-c
+        run: composer test-coverage
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
           fail_ci_if_error: false # optional (default = false)

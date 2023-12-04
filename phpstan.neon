@@ -10,8 +10,8 @@ parameters:
     paths:
         - src
     tmpDir: build/phpstan
-    checkOctaneCompatibility: true
-    checkModelProperties: true
+#    checkOctaneCompatibility: true
+#    checkModelProperties: true
     checkMissingIterableValueType: true
 #    disallowFloatsEverywhere: true
 

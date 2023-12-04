@@ -10,8 +10,6 @@ declare(strict_types=1);
  * This source file is subject to the MIT license that is bundled.
  */
 
-use Ergebnis\License;
-
 $header = <<<'header'
     This file is part of the guanguans/filament-login-captcha.
 
@@ -20,10 +18,10 @@ $header = <<<'header'
     This source file is subject to the MIT license that is bundled.
     header;
 
-/** @noinspection PhpParamsInspection */
 $finder = PhpCsFixer\Finder::create()
     ->in([
         __DIR__.'/config',
+        // __DIR__.'/resources',
         __DIR__.'/src',
         __DIR__.'/tests',
     ])
@@ -57,18 +55,17 @@ return (new PhpCsFixer\Config())
     ->setUsingCache(true)
     ->setCacheFile(__DIR__.'/.php-cs-fixer.cache')
     ->registerCustomFixers(new PhpCsFixerCustomFixers\Fixers())
-    // ->registerCustomFixers(new PedroTroller\CS\Fixer\Fixers())
     ->setRules([
-        // '@PHP70Migration' => true,
-        // '@PHP70Migration:risky' => true,
-        // '@PHP71Migration' => true,
-        // '@PHP71Migration:risky' => true,
-        // '@PHP73Migration' => true,
-        // '@PHP74Migration' => true,
-        // '@PHP74Migration:risky' => true,
+        '@PHP70Migration' => true,
+        '@PHP70Migration:risky' => true,
+        '@PHP71Migration' => true,
+        '@PHP71Migration:risky' => true,
+        '@PHP73Migration' => true,
+        '@PHP74Migration' => true,
+        '@PHP74Migration:risky' => true,
         '@PHP80Migration' => true,
         '@PHP80Migration:risky' => true,
-        // '@PHP81Migration' => true,
+        '@PHP81Migration' => true,
         // '@PHP82Migration' => true,
 
         // '@PHPUnit75Migration:risky' => true,

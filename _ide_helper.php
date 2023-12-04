@@ -10,8 +10,12 @@ declare(strict_types=1);
  * This source file is subject to the MIT license that is bundled.
  */
 
-namespace A {
+namespace {
+    class CaptchaBuilder extends \Guanguans\FilamentLoginCaptcha\Facades\CaptchaBuilder {}
+
+    class PhraseBuilder extends \Guanguans\FilamentLoginCaptcha\Facades\PhraseBuilder {}
 }
 
-namespace B {
+namespace Foo {
+    class Bar {}
 }

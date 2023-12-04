@@ -22,7 +22,7 @@
 ## 安装
 
 ```bash
-composer require guanguans/filament-login-captcha --prefer-dist -vvv
+composer require guanguans/filament-login-captcha --prefer-dist -v
 ```
 
 ## 使用

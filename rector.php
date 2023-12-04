@@ -17,8 +17,6 @@ use Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;
 use Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
 use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
 use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
-use Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector;
-use Rector\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector;
 use Rector\CodingStyle\Rector\Closure\StaticClosureRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
@@ -30,12 +28,9 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
 use Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector;
-use Rector\Laravel\Set\LaravelLevelSetList;
-use Rector\Laravel\Set\LaravelSetList;
 use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector;
-use Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
@@ -47,6 +42,8 @@ use Rector\Set\ValueObject\DowngradeLevelSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
+use RectorLaravel\Set\LaravelLevelSetList;
+use RectorLaravel\Set\LaravelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importNames(false, false);
@@ -54,7 +51,7 @@ return static function (RectorConfig $rectorConfig): void {
     // $rectorConfig->disableParallel();
     $rectorConfig->parallel(300);
     $rectorConfig->phpstanConfig(__DIR__.'/phpstan.neon');
-    $rectorConfig->phpVersion(PhpVersion::PHP_80);
+    $rectorConfig->phpVersion(PhpVersion::PHP_81);
     // $rectorConfig->cacheClass(FileCacheStorage::class);
     // $rectorConfig->cacheDirectory(__DIR__.'/build/rector');
     // $rectorConfig->containerCacheDirectory(__DIR__.'/build/rector');
@@ -85,8 +82,6 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->skip([
         // rules
-        // AddArrayDefaultToArrayPropertyRector::class,
-        // AddDefaultValueForUndefinedVariableRector::class,
         // AddSeeTestAnnotationRector::class,
         // CallableThisArrayToAnonymousFunctionRector::class,
         // ChangeAndIfToEarlyReturnRector::class,
@@ -96,7 +91,6 @@ return static function (RectorConfig $rectorConfig): void {
         // ReturnBinaryOrToEarlyReturnRector::class,
         // SimplifyBoolIdenticalTrueRector::class,
         // StaticClosureRector::class,
-        // UnSpreadOperatorRector::class,
 
         EncapsedStringsToSprintfRector::class,
         // InlineIfToExplicitIfRector::class,
@@ -160,9 +154,8 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->sets([
-        DowngradeLevelSetList::DOWN_TO_PHP_80,
-        LevelSetList::UP_TO_PHP_80,
-        SetList::PHP_80,
+        DowngradeLevelSetList::DOWN_TO_PHP_81,
+        LevelSetList::UP_TO_PHP_81,
         SetList::CODE_QUALITY,
         SetList::CODING_STYLE,
         SetList::DEAD_CODE,
@@ -174,12 +167,10 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::TYPE_DECLARATION,
         SetList::EARLY_RETURN,
 
-        PHPUnitLevelSetList::UP_TO_PHPUNIT_90,
-        PHPUnitSetList::PHPUNIT_90,
-        // PHPUnitSetList::PHPUNIT80_DMS,
+        PHPUnitLevelSetList::UP_TO_PHPUNIT_100,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
 
-        // LaravelLevelSetList::UP_TO_LARAVEL_70,
+        // LaravelLevelSetList::UP_TO_LARAVEL_100,
         // LaravelSetList::ARRAY_STR_FUNCTIONS_TO_STATIC_CALL,
         // // LaravelSetList::LARAVEL_STATIC_TO_INJECTION,
         // LaravelSetList::LARAVEL_CODE_QUALITY,
