@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace Guanguans\FilamentLoginCaptcha;
 
-class PackageSkeleton
+use Illuminate\Support\Traits\Macroable;
+use Illuminate\Support\Traits\Tappable;
+
+class PhraseBuilder extends \Gregwar\Captcha\PhraseBuilder
 {
-    public static function test(): bool
-    {
-        return true;
-    }
+    // use Conditionable;
+    use Macroable;
+    use Tappable;
 }

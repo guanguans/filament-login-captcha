@@ -230,6 +230,9 @@ return (new PhpCsFixer\Config())
             // 'ignored_tags' => [],
         ],
         'phpdoc_param_order' => true,
+        'phpdoc_align' => [
+            'align' => 'left',
+        ],
 
         // return_notation
         'simplified_null_return' => true,

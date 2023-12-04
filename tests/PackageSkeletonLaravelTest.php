@@ -26,8 +26,8 @@ final class PackageSkeletonLaravelTest extends LaravelTestCase
     #[RequiresPhpExtension('pgsql')]
     public function testTest(): void
     {
+        $this->markTestSkipped('The PostgreSQL extension is not available');
         $this->assertTrue(PackageSkeleton::test());
         $this->markTestIncomplete('This test has not been implemented yet.');
-        $this->markTestSkipped('The PostgreSQL extension is not available');
     }
 }
