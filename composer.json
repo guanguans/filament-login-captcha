@@ -43,7 +43,7 @@
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8",
         "brainmaestro/composer-git-hooks": "^3.0@alpha",
-        "driftingly/rector-laravel": "^0.26 || ^0.29",
+        "driftingly/rector-laravel": "^0.26 || ^0.29 || ^1.0",
         "dutchcodingcompany/filament-developer-logins": "^1.1",
         "ergebnis/composer-normalize": "^2.39",
         "friendsofphp/php-cs-fixer": "^3.40",
